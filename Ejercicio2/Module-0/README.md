@@ -1,13 +1,15 @@
-# MiniTorch Module 0  
+# MiniTorch Module 0
 
-<img src="https://minitorch.github.io/_images/match.png" width="100px">
+## Tarea 0.5: Visualización
 
-* Docs: https://minitorch.github.io/
+* **Conjunto de datos Simple**
 
-* Overview: https://minitorch.github.io/module0.html
+![Simple](img/Simple.png)
 
-* Tests:
+* **Conjunto de datos Splite**
 
-```
-python run_tests.py
-```
+![Simple](img/Split.png)
+
+* **Conjunto de datos Xor**
+
+![Simple](img/Xor.png)

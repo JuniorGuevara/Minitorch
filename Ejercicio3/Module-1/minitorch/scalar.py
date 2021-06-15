@@ -64,38 +64,47 @@ class Scalar(Variable):
 
     def __add__(self, b):
         # TODO: Implement for Task 1.2.
+        return Add.apply(self, b)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     def __lt__(self, b):
         # TODO: Implement for Task 1.2.
+        return LT.apply(self, b)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     def __gt__(self, b):
         # TODO: Implement for Task 1.2.
+        return LT.apply(b, self)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     def __sub__(self, b):
         # TODO: Implement for Task 1.2.
+        return Add.apply(self, -b)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     def __neg__(self):
         # TODO: Implement for Task 1.2.
+        return Neg.apply(self)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     def log(self):
         # TODO: Implement for Task 1.2.
+        return Log.apply(self)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     def exp(self):
         # TODO: Implement for Task 1.2.
+        return Exp.apply(self)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     def sigmoid(self):
         # TODO: Implement for Task 1.2.
+        return Sigmoid.apply(self)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     def relu(self):
         # TODO: Implement for Task 1.2.
+        return ReLU.apply(self)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     def get_data(self):
@@ -110,7 +119,8 @@ class ScalarFunction(FunctionBase):
         """Args:
 
            ctx (:class:`Context`): A special container object to save
-                                   any information that may be needed for the call to backward.
+                                   any information that may be needed for the
+                                   call to backward.
            *inputs (list of numbers): Numerical arguments.
 
         Returns:
@@ -123,10 +133,12 @@ class ScalarFunction(FunctionBase):
     def backward(ctx, d_out):
         """
         Args:
-            ctx (Context): A special container object holding any information saved during in the corresponding `forward` call.
+            ctx (Context): A special container object holding any information
+                           saved during in the corresponding `forward` call.
             d_out (number):
         Returns:
-            numbers : The computation of the derivative function :math:`f'_{x_i}` for each input :math:`x_i` times `d_out`.
+            numbers : The computation of the derivative function
+            :math:`f'_{x_i}` for each input :math:`x_i` times `d_out`.
         """
         pass
 
@@ -187,6 +199,7 @@ class Mul(ScalarFunction):
     @staticmethod
     def forward(ctx, a, b):
         # TODO: Implement for Task 1.2.
+        return operators.mul(a, b)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod
@@ -201,6 +214,7 @@ class Inv(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
+        return operators.inv(a)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod
@@ -215,6 +229,7 @@ class Neg(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
+        return operators.neg(a)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod
@@ -229,6 +244,7 @@ class Sigmoid(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
+        return operators.sigmoid(a)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod
@@ -243,6 +259,7 @@ class ReLU(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
+        return float(operators.relu(a))
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod
@@ -257,6 +274,7 @@ class Exp(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
+        return operators.exp(a)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod

@@ -3,15 +3,16 @@ from . import operators
 import numpy as np
 
 
-## Task 1.1
-## Derivatives
+#  Task 1.1
+#  Derivatives
 
 
 def central_difference(f, *vals, arg=0, epsilon=1e-6):
     r"""
     Computes an approximation to the derivative of `f` with respect to one arg.
 
-    See :doc:`derivative` or https://en.wikipedia.org/wiki/Finite_difference for more details.
+    See :doc:`derivative` or https://en.wikipedia.org/wiki/Finite_difference
+         for more details.
 
     Args:
        f : arbitrary function from n-scalar args to one value
@@ -23,11 +24,16 @@ def central_difference(f, *vals, arg=0, epsilon=1e-6):
        float : An approximation of :math:`f'_i(x_0, \ldots, x_{n-1})`
     """
     # TODO: Implement for Task 1.1.
+    vals_add = list(vals)
+    vals_add[arg] += epsilon
+    vals_subtract = list(vals)
+    vals_subtract[arg] -= epsilon
+    return (f(*vals_add) - f(*vals_subtract)) / (2 * epsilon)
     raise NotImplementedError('Need to implement for Task 1.1')
 
 
-## Task 1.2 and 1.4
-## Scalar Forward and Backward
+#  Task 1.2 and 1.4
+#  Scalar Forward and Backward
 
 
 class Scalar(Variable):

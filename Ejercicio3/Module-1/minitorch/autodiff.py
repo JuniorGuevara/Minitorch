@@ -16,7 +16,8 @@ def unwrap_tuple(x):
 class Variable:
     """
     Attributes:
-        history (:class:`History`) : the Function calls that created this variable or None if constant
+        history (:class:`History`) : the Function calls that created this
+                                     variable or None if constant
         derivative (number): the derivative with respect to this variable
         name (string) : an optional name for debugging
     """
@@ -38,7 +39,8 @@ class Variable:
 
     def backward(self, d_output=None):
         """
-        Calls autodiff to fill in the derivatives for the history of this object.
+        Calls autodiff to fill in the derivatives for the
+        history of this object.
         """
         if d_output is None:
             d_output = 1.0
@@ -48,12 +50,13 @@ class Variable:
     def derivative(self):
         return self._derivative
 
-    ## IGNORE
+    #  IGNORE
     def __hash__(self):
         return hash(self._name)
 
     def _add_deriv(self, val):
-        assert self.history.is_leaf(), "Only leaf variables can have derivatives."
+        assert self.history.is_leaf(), \
+               "Only leaf variables can have derivatives."
         if self._derivative is None:
             self._derivative = self.zeros()
         self._derivative += val
@@ -73,7 +76,7 @@ class Variable:
     def expand(self, x):
         return x
 
-    ## IGNORE
+    #  IGNORE
 
 
 class Context:
@@ -105,7 +108,8 @@ class History:
     Attributes:
         last_fn (:class:`FunctionBase`) : The last function that was called.
         ctx (:class:`Context`): The context for that function.
-        inputs (list of inputs) : The inputs that were given when `last_fn.forward` was called.
+        inputs (list of inputs) : The inputs that were given
+                                  when `last_fn.forward` was called.
     """
 
     def __init__(self, last_fn=None, ctx=None, inputs=None):
@@ -154,7 +158,8 @@ class FunctionBase:
                 raw_vals.append(v)
         ctx = Context(not need_grad)
         c = cls.forward(ctx, *raw_vals)
-        assert isinstance(c, cls.data_type), "Expected return typ %s got %s" % (
+        assert isinstance(c, cls.data_type), \
+            "Expected return typ %s got %s" % (
             cls.data_type,
             type(c),
         )
@@ -171,15 +176,24 @@ class FunctionBase:
         Args:
             cls (:class:`FunctionBase`): The Function
             ctx (:class:`Context`) : The context from running forward
-            inputs (list of args) : The args that were passed to :func:`FunctionBase.apply` (e.g. :math:`x, y`)
+            inputs (list of args) : The args that were passed to
+                                :func:`FunctionBase.apply` (e.g. :math:`x, y`)
             d_output (number) : The `d_output` value in the chain rule.
 
         Returns:
-            list of :class:`VariableWithDeriv`: A list of non-constant variables with their derivatives
-            (see `is_constant` to remove unneeded variables)
+            list of :class:`VariableWithDeriv`: A list of non-constant
+                variables with their derivatives
+                (see `is_constant` to remove unneeded variables)
 
         """
         # TODO: Implement for Task 1.3.
+        output_list = []
+        bacwards_values = cls.backward(ctx, d_output)
+        for variable, derivate in zip(tuple((bacwards_values, )), inputs):
+            if is_constant(variable):
+                continue
+            output_list.append(variable, derivate)
+        return output_list
         raise NotImplementedError('Need to implement for Task 1.3')
 
 
@@ -199,8 +213,9 @@ def backpropagate(final_variable_with_deriv):
     See :doc:`backpropagate` for details on the algorithm
 
     Args:
-       final_variable_with_deriv (:class:`VariableWithDeriv`): The final variable
-           and its derivative that we want to propagate backward to the leaves.
+       final_variable_with_deriv (:class:`VariableWithDeriv`): The final
+       variable and its derivative that we want to propagate backward to
+       the leaves.
     """
     # TODO: Implement for Task 1.4.
     raise NotImplementedError('Need to implement for Task 1.4')

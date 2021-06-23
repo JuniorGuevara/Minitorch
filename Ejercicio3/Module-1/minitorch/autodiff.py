@@ -188,11 +188,11 @@ class FunctionBase:
         """
         # TODO: Implement for Task 1.3.
         output_list = []
-        bacwards_values = cls.backward(ctx, d_output)
-        for variable, derivate in zip(tuple((bacwards_values, )), inputs):
+        bacwards_values = tuple(cls.backward(ctx, d_output), )
+        for variable, derivate in zip(inputs, bacwards_values):
             if is_constant(variable):
                 continue
-            output_list.append(variable, derivate)
+            output_list.append(VariableWithDeriv(variable, derivate))
         return output_list
         raise NotImplementedError('Need to implement for Task 1.3')
 

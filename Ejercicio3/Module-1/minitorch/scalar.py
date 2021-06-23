@@ -199,12 +199,15 @@ class Mul(ScalarFunction):
     @staticmethod
     def forward(ctx, a, b):
         # TODO: Implement for Task 1.2.
+        ctx.save_for_backward(a, b)
         return operators.mul(a, b)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
+        value_a, value_b = ctx.saved_values
+        return value_a, d_output, value_b * d_output
         raise NotImplementedError('Need to implement for Task 1.4')
 
 
@@ -214,12 +217,15 @@ class Inv(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
+        ctx.save_for_backward(a)
         return operators.inv(a)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
+        value_a = ctx.saved_values
+        return (- 1 / value_a ** 2) * d_output
         raise NotImplementedError('Need to implement for Task 1.4')
 
 
@@ -235,6 +241,7 @@ class Neg(ScalarFunction):
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
+        return -d_output
         raise NotImplementedError('Need to implement for Task 1.4')
 
 
@@ -244,12 +251,16 @@ class Sigmoid(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
+        ctx.save_for_backward(a)
         return operators.sigmoid(a)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
+        value_a = ctx.saved_values
+        sigmoid_value_a = operators.sigmoid(value_a)
+        return sigmoid_value_a * (1 - sigmoid_value_a) * d_output
         raise NotImplementedError('Need to implement for Task 1.4')
 
 
@@ -259,12 +270,15 @@ class ReLU(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
+        ctx.save_for_backward(a)
         return float(operators.relu(a))
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
+        value_a = ctx.saved_values
+        return operators.relu_back(value_a, d_output)
         raise NotImplementedError('Need to implement for Task 1.4')
 
 
@@ -274,12 +288,15 @@ class Exp(ScalarFunction):
     @staticmethod
     def forward(ctx, a):
         # TODO: Implement for Task 1.2.
+        ctx.save_for_backward(a)
         return operators.exp(a)
         raise NotImplementedError('Need to implement for Task 1.2')
 
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
+        value_a = ctx.saved_values
+        return value_a * d_output
         raise NotImplementedError('Need to implement for Task 1.4')
 
 

@@ -1,21 +1,26 @@
-# MiniTorch Module 1  
+# MiniTorch Module 1
 
-<img src="https://minitorch.github.io/_images/match.png" width="100px">
+## Tarea 1.5: Entrenamiento
 
-* Docs: https://minitorch.github.io/
-
-* Overview: https://minitorch.github.io/module1.html
-
-This module requires `operators.py` and `module.py` from Module 0
-
-```
-cp ../Module-0/operators.py ../Module-0/module.py minitorch/
-```
+### Simple
+~~~
+PTS = 50
+DATASET = datasets.Simple(PTS, vis=True)
+HIDDEN = 2
+RATE = 0.5
+~~~
 
 
-* Tests:
+![](./img/md1_fig1a.png)
+![](./img/md1_fig1b.png)
 
-```
-python run_tests.py
-```
 
+### Xor
+~~~
+PTS = 50
+DATASET = datasets.Xor(PTS, vis=True)
+HIDDEN = 10
+RATE = 0.5
+~~~
+![](./img/2a.png)
+![](./img/2b.png)

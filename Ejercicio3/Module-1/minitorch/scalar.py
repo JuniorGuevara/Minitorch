@@ -24,6 +24,7 @@ def central_difference(f, *vals, arg=0, epsilon=1e-6):
        float : An approximation of :math:`f'_i(x_0, \ldots, x_{n-1})`
     """
     # TODO: Implement for Task 1.1.
+
     vals_add = list(vals)
     vals_add[arg] += epsilon
     vals_subtract = list(vals)
@@ -207,7 +208,7 @@ class Mul(ScalarFunction):
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
         value_a, value_b = ctx.saved_values
-        return value_a, d_output, value_b * d_output
+        return value_b * d_output, value_a * d_output
         raise NotImplementedError('Need to implement for Task 1.4')
 
 
@@ -225,7 +226,7 @@ class Inv(ScalarFunction):
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
         value_a = ctx.saved_values
-        return (- 1 / value_a ** 2) * d_output
+        return operators.inv_back(value_a, d_output)
         raise NotImplementedError('Need to implement for Task 1.4')
 
 
@@ -301,7 +302,6 @@ class Exp(ScalarFunction):
 
 
 def derivative_check(f, *scalars):
-
     for x in scalars:
         x.requires_grad_(True)
     out = f(*scalars)

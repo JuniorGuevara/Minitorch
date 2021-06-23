@@ -188,7 +188,9 @@ class FunctionBase:
         """
         # TODO: Implement for Task 1.3.
         output_list = []
-        bacwards_values = tuple(cls.backward(ctx, d_output), )
+        bacwards_values = cls.backward(ctx, d_output)
+        if not isinstance(bacwards_values, tuple):
+            bacwards_values = (bacwards_values, )
         for variable, derivate in zip(inputs, bacwards_values):
             if is_constant(variable):
                 continue
@@ -218,4 +220,14 @@ def backpropagate(final_variable_with_deriv):
        the leaves.
     """
     # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    queue_variable_deriv = [final_variable_with_deriv]
+
+    while queue_variable_deriv:
+        variable_deriv = queue_variable_deriv.pop(0)
+        variable = variable_deriv.variable
+        if variable.history.is_leaf():
+            variable._add_deriv(variable_deriv.deriv)
+        else:
+            for var in variable.history.backprop_step(variable_deriv.deriv):
+                queue_variable_deriv.append(var)
+    # raise NotImplementedError('Need to implement for Task 1.4')

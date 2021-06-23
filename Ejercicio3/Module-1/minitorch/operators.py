@@ -67,7 +67,10 @@ def sigmoid(x):
 
     """
     # TODO: Implement for Task 0.1.
-    return 1 / 1 - np.exp(-x)
+    if x >= 0:
+        return (1.0 / (1.0 + np.exp(-x)))
+    else:
+        return (np.exp(x) / (1.0 + np.exp(x)))
     raise NotImplementedError('Need to implement for Task 0.1')
 
 

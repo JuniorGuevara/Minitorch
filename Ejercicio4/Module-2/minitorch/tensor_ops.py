@@ -30,6 +30,16 @@ def tensor_map(fn):
 
     def _map(out, out_shape, out_strides, in_storage, in_shape, in_strides):
         # TODO: Implement for Task 2.2.
+        for i in range(0, len(out)):
+            out_ind = np.array(out_shape)
+            count(i, out_shape, out_ind)
+            ind_act = [a for a in in_shape]
+
+            broadcast_index(out_ind, out_shape, in_shape, ind_act)
+            ind = index_to_position(ind_act, in_strides)
+
+            out[i] = fn(in_storage[ind])
+        return None
         raise NotImplementedError('Need to implement for Task 2.2')
 
     return _map
@@ -100,6 +110,19 @@ def tensor_zip(fn):
         b_strides,
     ):
         # TODO: Implement for Task 2.2.
+        for i in range(0, len(out)):
+            out_ind = np.array(out_shape)
+            count(i, out_shape, out_ind)
+
+            a_ind = [a for a in a_shape]
+            b_ind = [b for b in b_shape]
+            broadcast_index(out_ind, out_shape, a_shape, a_ind)
+            broadcast_index(out_ind, out_shape, b_shape, b_ind)
+
+            ind_a = index_to_position(a_ind, a_strides)
+            ind_b = index_to_position(b_ind, b_strides)
+            out[i] = fn(a_storage[ind_a], b_storage[ind_b])
+        return None
         raise NotImplementedError('Need to implement for Task 2.2')
 
     return _zip
@@ -167,7 +190,17 @@ def tensor_reduce(fn):
         reduce_shape,
         reduce_size,
     ):
+        for i in range(len(out)):
+            out_ind = np.array(out_shape)
+            count(i, out_shape, out_ind)
+            for j in range(reduce_size):
+                red_ind = np.array(reduce_shape)
+                count(j, reduce_shape, red_ind)
+                add_ind = out_ind + red_ind
+                add_pos = index_to_position(add_ind, a_strides)
+                out[i] = fn(out[i], a_storage[add_pos])
         # TODO: Implement for Task 2.2.
+        return None
         raise NotImplementedError('Need to implement for Task 2.2')
 
     return _reduce

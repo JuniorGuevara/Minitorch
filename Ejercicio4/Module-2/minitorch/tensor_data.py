@@ -13,8 +13,9 @@ class IndexingError(RuntimeError):
 
 def index_to_position(index, strides):
     """
-    Converts a multidimensional tensor `index` into a single-dimensional position in
-    storage based on strides.
+    Converts a multidimensional tensor `index` into
+    a single-dimensional position in storage
+    based on strides.
 
     Args:
         index (array-like): index tuple of ints
@@ -25,6 +26,10 @@ def index_to_position(index, strides):
     """
 
     # TODO: Implement for Task 2.1.
+    position = 0
+    for idx, s in zip(index, strides):
+        position += idx * s
+    return position
     raise NotImplementedError('Need to implement for Task 2.1')
 
 
@@ -45,7 +50,17 @@ def count(position, shape, out_index):
 
     """
     # TODO: Implement for Task 2.1.
-    raise NotImplementedError('Need to implement for Task 2.1')
+    stride = strides_from_shape(shape)
+    index = 0
+    for ind, s in enumerate(stride):
+        index = position // s
+        position = position - index * s
+        out_index[ind] = index
+
+    print(out_index)
+
+    return None
+    # raise NotImplementedError('Need to implement for Task 2.1')
 
 
 def broadcast_index(big_index, big_shape, shape, out_index):
@@ -66,6 +81,12 @@ def broadcast_index(big_index, big_shape, shape, out_index):
         None : Fills in `out_index`.
     """
     # TODO: Implement for Task 2.4.
+    for i, s in enumerate(shape):
+        if s > 1:
+            out_index[i] = big_index[i + len(big_shape) - len(shape)]
+        else:
+            out_index[i] = 0
+    return None
     raise NotImplementedError('Need to implement for Task 2.4')
 
 
@@ -84,6 +105,34 @@ def shape_broadcast(shape1, shape2):
         IndexingError : if cannot broadcast
     """
     # TODO: Implement for Task 2.4.
+    len1 = len(shape1)
+    len2 = len(shape2)
+    least = min(len1, len2)
+    most = []
+    if len1 == least:
+        most = shape2
+    else:
+        most = shape1
+
+    out = [0 for i in range(least)]
+
+    if least == 1:
+        if shape1[-1] != 1 and shape2[-1] != 1 and shape1[-1] != shape2[-1]:
+            raise IndexingError("Indices do not match!")
+        out = [max(shape1[-1], shape2[-1])]
+        out_shape = list(most)[: len(most) - len(out)] + out
+        return tuple(out_shape)
+
+    for i in range(least):
+        i = least - 1 - i
+        if shape1[i] == 1 or shape2[i] == 1:
+            out[i] = shape1[i] * shape2[i]
+        elif shape1[i] != shape2[i]:
+            raise IndexingError("Indices do not match!")
+        else:
+            out[i] = shape1[i]
+    out_shape = list(most)[: len(most) - len(out)] + out
+    return tuple(out_shape)
     raise NotImplementedError('Need to implement for Task 2.4')
 
 
@@ -109,7 +158,8 @@ class TensorData:
         assert isinstance(strides, tuple), "Strides must be tuple"
         assert isinstance(shape, tuple), "Shape must be tuple"
         if len(strides) != len(shape):
-            raise IndexingError(f"Len of strides {strides} must match {shape}.")
+            raise IndexingError(f"Len of strides {strides}" +
+                                "must match {shape}.")
         self._strides = array(strides)
         self._shape = array(shape)
         self.strides = strides
@@ -124,7 +174,8 @@ class TensorData:
 
     def is_contiguous(self):
         """
-        Check that the layout is contiguous, i.e. outer dimensions have bigger strides than inner dimensions.
+        Check that the layout is contiguous, i.e. outer dimensions
+        have bigger strides than inner dimensions.
 
         Returns:
             bool : True if contiguous
@@ -151,9 +202,11 @@ class TensorData:
             raise IndexingError(f"Index {index} must be size of {self.shape}.")
         for i, ind in enumerate(index):
             if ind >= self.shape[i]:
-                raise IndexingError(f"Index {index} out of range {self.shape}.")
+                raise IndexingError(f"Index {index} " +
+                                    " out of range {self.shape}.")
             if ind < 0:
-                raise IndexingError(f"Negative indexing for {index} not supported.")
+                raise IndexingError(f"Negative indexing for {index} "
+                                    + " not supported.")
 
         # Call fast indexing.
         return index_to_position(array(index), self._strides)
@@ -185,12 +238,16 @@ class TensorData:
             order (list): a permutation of the dimensions
 
         Returns:
-            :class:`TensorData`: a new TensorData with the same storage and a new dimension order.
+            :class:`TensorData`: a new TensorData with the same
+                                 storage and a new dimension order.
         """
         assert list(sorted(order)) == list(
             range(len(self.shape))
         ), f"Must give a position to each dimension. Shape: {self.shape} Order: {order}"
 
+        new_shape = tuple([self.shape[idx] for idx in order])
+        new_stride = tuple([self.strides[idx] for idx in order])
+        return TensorData(self._storage, new_shape, new_stride)
         # TODO: Implement for Task 2.1.
         raise NotImplementedError('Need to implement for Task 2.1')
 
